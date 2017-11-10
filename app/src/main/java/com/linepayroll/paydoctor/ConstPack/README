@@ -1,0 +1,25 @@
+작성일 : 2017-11-10
+작성자 : 심철 eisen
+Contact : eisen1990@naver.com
+
+ConstPack :
+    |   ConstPack 패키지는 Java Activity, Class에서 사용될 상수들을 정의한 패키지.
+    |   Class 내에서 일반적으로 사용하는 String, int, URL 등은 모두 이 패키지에서 정의하고 사용한다.
+    |   Package 내의 모든 Class들은 public으로 선언되며
+    |   Class 내에서 선언한 상수들은 public final static으로 사용한다.
+    |   Naming 규칙은 "SAMPLE_DATA" 등으로 모두 Upper Case로 작성하며, space등 공백은 _ (Under bar)로 작성한다.
+    |
+    |- ConstNumber :
+    |       상수(숫자)들을 정의한 파일
+    |       Test를 위한 Max loop 또는 UI 구현 시 사용될 샘플 Value 등을 정의한다.
+    |
+    |- ConstString :
+    |       상수(문자열)들을 정의한 파일
+    |       간단한 예로, TextView에 setText 등, Toast에 들어갈 문자열 등은 해당 파일에서 정의하고 사용한다.
+    |
+    |- ConstURL :
+    |       Rest API 서버에 URL 요청을 위한 Base URL 등을 정의한 파일
+    |
+
+
+** DEBUG용 Log.d / Log.i 안에서 사용될 Tag, String은 포함되지 않는다.

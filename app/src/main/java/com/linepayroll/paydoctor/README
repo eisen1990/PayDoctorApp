@@ -1,0 +1,30 @@
+작성일 : 2017-11-10
+작성자 : 심철 eisen
+Contact : eisen1990@naver.com
+
+
+****** 기존 작성된 코드를 참고로하여 작성하길 바랍니다.
+
+
+각 Package는 근태현황, 연차확인, 급여명세서, 취업규칙열람, 개인정보 변경 Activity들에 대한
+Package이고, 해당 패키지 안에 ListViewAdapter, Fragment 등의 Class들이 함께 들어갈 수 있다.
+
+** 각 Activity에서 필요로 하는 Rest API들은 RestAPI Package에서 따로 관리한다.
+
+
+
+각 Activity와 Class 이름 그리고 Activity, Class 내에서 변수 선언은 PascalCase로 선언한다.
+예) String TestValue
+    int SomeGoodValue
+
+    RestAPI Package 내에서 Class명
+    LoadingTask
+        - LoadingTask Class 내에서 변수 선언
+          int LoadingValue 등.
+
+
+
+각 Activity에서 메소드 선언은 camelCase로 선언한다.
+예) isTrue()
+    doSomeThing()
+

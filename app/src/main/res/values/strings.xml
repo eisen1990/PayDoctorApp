@@ -1,0 +1,38 @@
+<!--
+
+    작성일 : 2017-11-10
+    작성자 : 심철 eisen
+    Contact : eisen1990@naver.com
+
+
+    Layout에서 사용되는 모든 String 값은 strings.xml에서 정의한다.
+    strings.xml 파일은 현재 두 개인데, 각각 한글과 영문이다.
+    만일 영문 string 값이 존재하지 않을 경우, 그에 해당하는 한글 string으로 자동 대체됨.
+
+
+    ** 참고
+    Android Studio의 왼쪽 탐색기 화면에서 상단 탭에 Android와 Project 등
+    파일 구조를 바라보는 시점을 변경할 수 있는데, 여기서 res 폴더 안에
+    values와 values-en 파일이 각각 존재한다.
+-->
+
+
+<resources>
+    <string name="app_name">급여박사</string>
+
+    <!-- Common String -->
+
+    <string name="cancel">취소</string>
+
+
+    <!-- Loading Activity -->
+
+
+    <!-- Main Activity -->
+    <string name="AttendanceStatus">근태현황</string>
+    <string name="CheckAnnualLeave">연차확인</string>
+    <string name="PayStub">급여명세서</string>
+    <string name="RuleOfEmployment">취업규칙 열람</string>
+    <string name="PrivacySetting">개인정보 변경</string>
+
+</resources>

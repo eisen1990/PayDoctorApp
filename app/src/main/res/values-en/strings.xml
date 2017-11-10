@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">PayDoctor</string>
+
+    <!-- Common String -->
+
+    <string name="cancel">cancel</string>
+
+
+    <!-- Loading Activity -->
+
+
+    <!-- Main Activity -->
+    <string name="AttendanceStatus">Attendance Status</string>
+    <string name="CheckAnnualLeave">Check Annual Leaves</string>
+    <string name="PayStub">Pay Stub</string>
+    <string name="RuleOfEmployment">Rule Of Employment</string>
+    <string name="PrivacySetting">Privacy Setting</string>
+
+
+</resources>
