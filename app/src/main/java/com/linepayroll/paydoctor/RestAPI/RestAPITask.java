@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
@@ -59,9 +61,19 @@ public class RestAPITask extends AsyncTask <String, Void, JSONObject>{
 
             StringBuffer Buffer = new StringBuffer();
             OutputStreamWriter OutStream = new OutputStreamWriter(Conn.getOutputStream(), "UTF-8");
-            PrintWriter writer = new PrintWriter(OutStream);
-            writer.write(Buffer.toString());
-            writer.flush();
+            PrintWriter Writer = new PrintWriter(OutStream);
+            Writer.write(Buffer.toString());
+            Writer.flush();
+
+            InputStreamReader InputStream = new InputStreamReader(Conn.getInputStream(), "UTF-8");
+            BufferedReader Reader = new BufferedReader(InputStream);
+            StringBuilder Builder = new StringBuilder();
+            String ResultStr;
+            while( ( ResultStr = Reader.readLine() ) != null ) {
+                Builder.append(ResultStr + "\n");
+            }
+
+            result = new JSONObject(Builder.toString());
 
         } catch (MalformedURLException e){
             e.printStackTrace();
