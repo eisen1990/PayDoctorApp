@@ -1,5 +1,6 @@
 package com.linepayroll.paydoctor.RestAPI;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -63,7 +64,7 @@ public class LoadingTask extends AsyncTask<Void, Integer, Void> {
          * 다음 Acitivity에 전달할 것
          */
         Parent.startActivity(intent);
-
+        ((Activity) Parent).finish();
     }
 
     @Override

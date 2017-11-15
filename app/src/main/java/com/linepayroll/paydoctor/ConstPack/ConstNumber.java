@@ -14,6 +14,11 @@ public class ConstNumber {
     public final static int TEST_MAX_LOOP_COUNT =  10000;
     public final static int TEST_HASH_KEY = 14;
 
+    /**
+     * 출퇴근 상태
+     */
+    public final static int PUNCH_IN = 0;
+    public final static int PUNCH_OUT = 1;
 
     /**
      * BLE Sacnning 관련

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     //Bluetooth를 위한 클래스
     private BluetoothAdapter mBluetoothAdapter;
     private Handler BleHandler;
+    private int PunchInOutFlag = -1;
+    private int ScanFlag = -1;
 
     //근태현황, 연차확인, 급여명세서, 취업규칙열람, 개인정보 변경 버튼들의 ID 값
     static final int[] BUTTONS_ID = {
@@ -76,18 +79,17 @@ public class MainActivity extends AppCompatActivity {
         NextDateBtn = (ImageButton) findViewById(R.id.NextDate);
 
 
-        /**
-         * 출퇴근 ImageButton
-         */
-        PunchInBtn = (ImageButton) findViewById(R.id.PunchInBtn);
-        PunchOutBtn = (ImageButton) findViewById(R.id.PunchOutBtn);
-
-
         for (int BtnIndex : BUTTONS_ID) {
             Button MenuBtn = (Button) findViewById(BtnIndex);
             MenuBtn.setOnClickListener(BtnClickListener);
         }
 
+        /**
+         * Bluetooth BLE 탐색을 위한 설정
+         * Permission 및 기타
+         */
+
+        BleHandler = new Handler();
         int PermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
 
         if (PermissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -114,6 +116,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        /**
+         * 출퇴근 ImageButton
+         */
+        PunchInBtn = (ImageButton) findViewById(R.id.PunchInBtn);
+        PunchOutBtn = (ImageButton) findViewById(R.id.PunchOutBtn);
         PunchInBtn.setOnClickListener(ImgBtnClickListener);
         PunchOutBtn.setOnClickListener(ImgBtnClickListener);
 
@@ -148,29 +155,6 @@ public class MainActivity extends AppCompatActivity {
                 return;
         }
     }
-
-    ImageButton.OnClickListener ImgBtnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            /**
-             * 출/퇴근 ImageButton 에 대한 핸들러.
-             * BLE Scanning을 시작한다.
-             */
-
-            int id = v.getId();
-
-            if (id == R.id.PunchInBtn) {
-                //Todo: 출근 버튼 클릭 시
-                scanLeDevice(true);
-            } else if(id == R.id.PunchOutBtn) {
-                //Todo: 퇴근 버튼 클릭 시
-
-            } else {
-                //Todo: 에러 발생
-                Log.d("MainActivity", "ImageButton 핸들러 에러");
-            }
-        }
-    };
 
     Button.OnClickListener BtnClickListener = new View.OnClickListener() {
         @Override
@@ -216,8 +200,78 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void scanLeDevice(final boolean enable) {
-        if (enable) {
+    ImageButton.OnClickListener ImgBtnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            /**
+             * 출/퇴근 ImageButton 에 대한 핸들러.
+             * BLE Scanning을 시작한다.
+             */
+
+            int id = v.getId();
+
+            if (id == R.id.PunchInBtn) {
+                //Todo: 출근 버튼 클릭 시
+                scanLeDevice(true, ConstNumber.PUNCH_IN);
+            } else if (id == R.id.PunchOutBtn) {
+                //Todo: 퇴근 버튼 클릭 시
+                scanLeDevice(true, ConstNumber.PUNCH_OUT);
+            } else {
+                //Todo: 에러 발생
+                Log.d("MainActivity", "ImageButton 핸들러 에러");
+            }
+        }
+    };
+
+    private BluetoothAdapter.LeScanCallback BleScanCallBack = new BluetoothAdapter.LeScanCallback() {
+        @Override
+        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (device.toString().compareTo(ConstString.TEST_BLE_MAC_ADDR) == 0 && ScanFlag == 0) {
+                        //Bluetooth onLeScan은 stopLeScan이 실행되기 전까지 지속적으로 수행하므로, if로 한번 스캔 당 한번만 실행하도록 한다.
+                        ScanFlag = 1;
+
+                        Toast.makeText(MainActivity.this,
+                                ConstString.PUNCH_IN_TEXT_KR + " : " + device.toString() + ", " + (new Date()).toString(),
+                                Toast.LENGTH_SHORT).show();
+
+                        //postDelayed 이전에 BLE 탐색 완료.
+                        if (PunchInOutFlag == ConstNumber.PUNCH_IN) {
+                            //Todo: Punch In을 위한 Rest API 호출
+
+                        } else if (PunchInOutFlag == ConstNumber.PUNCH_OUT) {
+                            //Todo: Punch Out을 위한 Rest API 호출
+
+                        } else {
+                            //Todo: Error status
+                            Log.d("MainActivity", "Punch In/Out 을 위한 수행이 아니다.");
+                        }
+                    }
+                }
+            });
+        }
+    };
+
+    private void scanLeDevice(final boolean Enable, final int PunchFlag) {
+        PunchInOutFlag = PunchFlag;
+        ScanFlag = 0;
+
+        if(mBluetoothAdapter == null) {
+            Log.d("MainActivity", "Bluetooth 지원 안함");
+            return;
+        } else {
+            /**
+             * Bluetooth를 지원하고,
+             * Bluetooth가 꺼져있다면, 환경설정에서 켜준다.
+             */
+            if(!mBluetoothAdapter.isEnabled()) {
+                mBluetoothAdapter.enable();
+            }
+        }
+
+        if (Enable) {
             // Stops scanning after a pre-defined scan period.
             BleHandler.postDelayed(new Runnable() {
                 @Override
@@ -234,20 +288,4 @@ public class MainActivity extends AppCompatActivity {
         invalidateOptionsMenu();
     }
 
-    private BluetoothAdapter.LeScanCallback BleScanCallBack = new BluetoothAdapter.LeScanCallback() {
-        @Override
-        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if(device.toString().compareTo(ConstString.TEST_BLE_MAC_ADDR) == 0) {
-                        Toast.makeText(MainActivity.this,
-                                ConstString.PUNCH_IN_KR + " : " + device.toString() + ", " + (new Date()).toString(),
-                                Toast.LENGTH_SHORT).show();
-                        //Todo:postDelayed 이전에 BLE 탐색 완료.
-                    }
-                }
-            });
-        }
-    };
 }

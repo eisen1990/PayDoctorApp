@@ -23,8 +23,8 @@ public class ConstString {
     /**
      * 출퇴근 Text
      */
-    public final static String PUNCH_IN_KR = "출근";
-    public final static String PUNCH_OUT_KR = "퇴근";
+    public final static String PUNCH_IN_TEXT_KR = "출근";
+    public final static String PUNCH_OUT_TEXT_KR = "퇴근";
 
 
 
