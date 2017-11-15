@@ -40,6 +40,6 @@ public class LoadingActivity extends AppCompatActivity {
         /**
          * RestAPI Package의 LoadingTask를 통해 API Connection
          */
-        new LoadingTask(this, Loading, LoadingMessage).execute(ConstURL.BASE_URL, String.valueOf(USER_ID_CODE));
+        new LoadingTask(this, Loading, LoadingMessage).execute(ConstURL.IS_PUNCHINOUT_URL, String.valueOf(USER_ID_CODE));
     }
 }

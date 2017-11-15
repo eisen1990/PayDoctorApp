@@ -31,7 +31,10 @@ public class ConstString {
      * 출퇴근 Text
      */
     public final static String PUNCH_IN_TEXT_KR = "출근";
+    public final static String PUNCH_IN_FAIL_KR = "출근 체크 실패";
     public final static String PUNCH_OUT_TEXT_KR = "퇴근";
+    public final static String PUNCH_OUT_FAIL_KR = "퇴근 체크 실패";
+    public final static String PUNCH_IN_OUT_FAIL_KR = "출/퇴근 체크 실패";
 
 
 

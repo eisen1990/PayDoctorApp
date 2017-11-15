@@ -4,7 +4,6 @@ import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,9 +24,11 @@ import com.linepayroll.paydoctor.AnnualLeavePack.CheckAnnualLeaveActivity;
 import com.linepayroll.paydoctor.AttendancePack.AttendanceStatusActivity;
 import com.linepayroll.paydoctor.ConstPack.ConstNumber;
 import com.linepayroll.paydoctor.ConstPack.ConstString;
+import com.linepayroll.paydoctor.ConstPack.ConstURL;
 import com.linepayroll.paydoctor.PayStubPack.PayStubActivity;
 import com.linepayroll.paydoctor.PrivacySettingPack.PrivacySettingActivity;
 import com.linepayroll.paydoctor.RuleOfEmployPack.RuleOfEmploymentActivity;
+import com.linepayroll.paydoctor.Utils.TimeCompo;
 
 import java.util.Date;
 
@@ -58,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
 
     //사용자 정보 변수
     private int USER_ID_CODE;
+    private String CHECK_PUNCH_IN;
+    private String CHECK_PUNCH_OUT;
+
 
     //근태현황, 연차확인, 급여명세서, 취업규칙열람, 개인정보 변경 버튼들의 ID 값
     static final int[] BUTTONS_ID = {
@@ -75,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         USER_ID_CODE = intent.getExtras().getInt("USER_ID_CODE");
+        CHECK_PUNCH_IN = intent.getExtras().getString("PUNCH_IN");
+        CHECK_PUNCH_OUT = intent.getExtras().getString("PUNCH_OUT");
+
 
         /**
          * Main Activity 상단의 날짜 TextView와
@@ -129,6 +136,9 @@ public class MainActivity extends AppCompatActivity {
         PunchOutBtn = (ImageButton) findViewById(R.id.PunchOutBtn);
         PunchInBtn.setOnClickListener(ImgBtnClickListener);
         PunchOutBtn.setOnClickListener(ImgBtnClickListener);
+
+        if(CHECK_PUNCH_IN != null) PunchInBtn.setImageDrawable(getResources().getDrawable(R.drawable.easw_rev));
+        if(CHECK_PUNCH_OUT != null) PunchOutBtn.setImageDrawable(getResources().getDrawable(R.drawable.easw_rev));
 
 
         /**
@@ -242,17 +252,20 @@ public class MainActivity extends AppCompatActivity {
                     if (device.toString().compareTo(ConstString.TEST_BLE_MAC_ADDR) == 0 && ScanFlag == 0) {
                         //Bluetooth onLeScan은 stopLeScan이 실행되기 전까지 지속적으로 수행하므로, if로 한번 스캔 당 한번만 실행하도록 한다.
                         ScanFlag = 1;
-
+                        /*
                         Toast.makeText(MainActivity.this,
                                 ConstString.PUNCH_IN_TEXT_KR + " : " + device.toString() + ", " + (new Date()).toString(),
                                 Toast.LENGTH_SHORT).show();
+                        */
 
                         //postDelayed 이전에 BLE 탐색 완료.
                         if (PunchInOutFlag == ConstNumber.PUNCH_IN) {
                             //Todo: Punch In을 위한 Rest API 호출
+                            new PunchInOutTask(MainActivity.this, PunchInBtn).execute(ConstURL.PUNCHIN_URL, String.valueOf(USER_ID_CODE), TimeCompo.getCurrentTime());
 
                         } else if (PunchInOutFlag == ConstNumber.PUNCH_OUT) {
                             //Todo: Punch Out을 위한 Rest API 호출
+                            new PunchInOutTask(MainActivity.this, PunchOutBtn).execute(ConstURL.PUNCHOUT_URL, String.valueOf(USER_ID_CODE), TimeCompo.getCurrentTime());
 
                         } else {
                             //Todo: Error status
@@ -268,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
         PunchInOutFlag = PunchFlag;
         ScanFlag = 0;
 
-        if(mBluetoothAdapter == null) {
+        if (mBluetoothAdapter == null) {
             Log.d("MainActivity", "Bluetooth 지원 안함");
             return;
         } else {
@@ -276,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
              * Bluetooth를 지원하고,
              * Bluetooth가 꺼져있다면, 환경설정에서 켜준다.
              */
-            if(!mBluetoothAdapter.isEnabled()) {
+            if (!mBluetoothAdapter.isEnabled()) {
                 mBluetoothAdapter.enable();
             }
         }

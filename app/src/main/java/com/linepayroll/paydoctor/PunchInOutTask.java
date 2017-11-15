@@ -1,11 +1,22 @@
 package com.linepayroll.paydoctor;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.linepayroll.paydoctor.ConstPack.ConstString;
+import com.linepayroll.paydoctor.ConstPack.StatusCode;
+import com.linepayroll.paydoctor.MetaInfo.LoadingActivity;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
@@ -14,26 +25,17 @@ import java.net.URL;
 
 /**
  * Created by eisen on 2017-11-13.
- *
- * FIXME : 해당 클래스는 RestAPI 호출을 위한 Sample Source Code이므로,
- * FIXME:  각각의 Activity들에서 Rest API 호출이 필요할 경우 아래 코드를 참고하여
- * FIXME : Parameter들에 맞게 작성할 것.
- * Rest API는 모두 JSON 방식으로 Return 하므로, AsyncTask<String, Void, JSONObject>의 JSONObject는 기본적으로 동일하다.
- * String 인자는 execute()의 Parameter로, 다수의 String type veriable이 올 수 있다. 그리고 execute()의 Parameter는
- * doInBackground(String... params)에 전달되며, execute(첫 번째, 두 번째, n번 째) Argument는 doInBackground의 params에서 params[0], params[1], params[n-1]
- *
- * Sample Code:
- *      ... source code ...
- *
- *      JSONObject ResultObject = new RestAPITask().execute(SOME_URL_STRING_VALUE).get();
- *
- *      ... source code ...
+ * Main Activity의 출퇴근 관련 Task
  */
 
-public class RestAPITask extends AsyncTask<String, Void, JSONObject> {
+public class PunchInOutTask extends AsyncTask<String, Void, JSONObject> {
 
-    public RestAPITask() {
-        super();
+    private Context Parent;
+    private ImageButton ImgBtn;
+
+    public PunchInOutTask(Context context, ImageButton ImgBtn) {
+        this.Parent = context;
+        this.ImgBtn = ImgBtn;
     }
 
     @Override
@@ -42,8 +44,28 @@ public class RestAPITask extends AsyncTask<String, Void, JSONObject> {
     }
 
     @Override
-    protected void onPostExecute(JSONObject aJSONObject) {
-        super.onPostExecute(aJSONObject);
+    protected void onPostExecute(JSONObject jsonObject) {
+        super.onPostExecute(jsonObject);
+
+        try {
+            JSONObject HEAD = jsonObject.getJSONObject("HEAD");
+            JSONObject BODY = jsonObject.getJSONObject("BODY");
+            Integer STATUS_CODE = HEAD.getInt("STATUS_CODE");
+
+            if((int)STATUS_CODE == StatusCode.SUCCESS_CODE) {
+                //Todo: 출근 혹은 퇴근 성공했을 경우, Image 바꾸기로 우선 작업진행.
+                ImgBtn.setImageDrawable(Parent.getResources().getDrawable(R.drawable.easw_rev));
+
+            } else {
+                //Todo: 출퇴근 실패
+                Toast.makeText(Parent, ConstString.PUNCH_IN_OUT_FAIL_KR, Toast.LENGTH_SHORT).show();
+                Log.d("PunchIn", STATUS_CODE+"");
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -53,8 +75,11 @@ public class RestAPITask extends AsyncTask<String, Void, JSONObject> {
 
         try {
             String url = params[0];
+            String Body = "USER_ID_CODE=" + params[1] +
+                          "&PUNCH_DATE=" + params[2];
 
             URL URLObj = new URL(url);
+
 
             HttpURLConnection Conn = (HttpURLConnection) URLObj.openConnection();
 
@@ -73,11 +98,8 @@ public class RestAPITask extends AsyncTask<String, Void, JSONObject> {
             Conn.setDoInput(true);
             Conn.setDoOutput(true);
 
-            StringBuffer Buffer = new StringBuffer();
-            OutputStreamWriter OutStream = new OutputStreamWriter(Conn.getOutputStream(), "UTF-8");
-            PrintWriter Writer = new PrintWriter(OutStream);
-            Writer.write(Buffer.toString());
-            Writer.flush();
+            OutputStream OutStream = Conn.getOutputStream();
+            OutStream.write(Body.getBytes("utf-8"));
 
             InputStreamReader InputStream = new InputStreamReader(Conn.getInputStream(), "UTF-8");
             BufferedReader Reader = new BufferedReader(InputStream);

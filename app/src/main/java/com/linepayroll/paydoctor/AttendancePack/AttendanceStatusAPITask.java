@@ -1,16 +1,19 @@
 package com.linepayroll.paydoctor.AttendancePack;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
 
 /**
  * Created by eisen on 2017-11-15.
@@ -47,6 +50,8 @@ public class AttendanceStatusAPITask extends AsyncTask<String, Void, JSONObject>
 
         try {
             String url = params[0];
+            String Body = "USER_ID_CODE=" + params[1] +
+                          "&SEARCH_MONTH=" + params[2];
 
             URL URLObj = new URL(url);
 
@@ -67,11 +72,8 @@ public class AttendanceStatusAPITask extends AsyncTask<String, Void, JSONObject>
             Conn.setDoInput(true);
             Conn.setDoOutput(true);
 
-            StringBuffer Buffer = new StringBuffer();
-            OutputStreamWriter OutStream = new OutputStreamWriter(Conn.getOutputStream(), "UTF-8");
-            PrintWriter Writer = new PrintWriter(OutStream);
-            Writer.write(Buffer.toString());
-            Writer.flush();
+            OutputStream OutStream = Conn.getOutputStream();
+            OutStream.write(Body.getBytes("utf-8"));
 
             InputStreamReader InputStream = new InputStreamReader(Conn.getInputStream(), "UTF-8");
             BufferedReader Reader = new BufferedReader(InputStream);

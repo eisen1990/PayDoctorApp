@@ -8,6 +8,7 @@ public class AttendanceCalendarItem {
 
     private String Day;
     private boolean inMonth;
+    private boolean Punch;
 
     public String getDay() {
         return Day;
@@ -23,5 +24,13 @@ public class AttendanceCalendarItem {
 
     public void setInMonth(boolean inMonth) {
         this.inMonth = inMonth;
+    }
+
+    public boolean isPunch() {
+        return Punch;
+    }
+
+    public void setPunch(boolean punch) {
+        Punch = punch;
     }
 }

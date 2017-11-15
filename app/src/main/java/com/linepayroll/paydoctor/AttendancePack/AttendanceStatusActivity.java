@@ -1,7 +1,10 @@
 package com.linepayroll.paydoctor.AttendancePack;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -10,8 +13,13 @@ import android.widget.TextView;
 
 import com.linepayroll.paydoctor.ConstPack.ConstNumber;
 import com.linepayroll.paydoctor.ConstPack.ConstURL;
+import com.linepayroll.paydoctor.ConstPack.StatusCode;
+import com.linepayroll.paydoctor.MainActivity;
 import com.linepayroll.paydoctor.R;
+import com.linepayroll.paydoctor.Utils.TimeCompo;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -36,6 +44,8 @@ public class AttendanceStatusActivity extends AppCompatActivity {
     Calendar ThisMonthCalendar;
     Calendar NextMonthCalendar;
 
+    private int USER_ID_CODE;
+
     private AttendanceCalendarAdapter mCalendarAdapter;
     private ArrayList<AttendanceCalendarItem> DayList;
 
@@ -43,6 +53,9 @@ public class AttendanceStatusActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance_status);
+
+        Intent intent = getIntent();
+        USER_ID_CODE = intent.getExtras().getInt("USER_ID_CODE");
 
         PrevMonthBtn = (Button) findViewById(R.id.PrevMonth);
         NextMonthBtn = (Button) findViewById(R.id.NextMonth);
@@ -55,20 +68,12 @@ public class AttendanceStatusActivity extends AppCompatActivity {
 
         DayList = new ArrayList<AttendanceCalendarItem>();
 
-        JSONObject ResultObject = null;
-        try {
-            ResultObject = new AttendanceStatusAPITask().execute(ConstURL.TEST_BASE_URL).get();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        if(ResultObject != null) {
-
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
         ThisMonthCalendar = Calendar.getInstance();
         ThisMonthCalendar.set(Calendar.DAY_OF_MONTH, 1);
         getCalendar(ThisMonthCalendar);
@@ -83,6 +88,43 @@ public class AttendanceStatusActivity extends AppCompatActivity {
         int PrevMonthEndDay;
         int DayOfMonth;
         int ThisMonthLastDay;
+
+        AttendanceStatusAPITask attendanceStatusAPITask = new AttendanceStatusAPITask();
+        JSONObject ResultObject = null;
+        JSONObject HEAD = null;
+        JSONObject BODY = null;
+        JSONArray DAY_LIST = null;
+        try {
+            String YEAR = String.valueOf(ThisMonthCalendar.get(Calendar.YEAR));
+            String MONTH = String.valueOf(ThisMonthCalendar.get(Calendar.MONTH)+1);
+            String SEARCH_MONTH = YEAR + "-" + MONTH;
+            ResultObject = attendanceStatusAPITask.execute(ConstURL.ATTENDANCE_STATUS, String.valueOf(USER_ID_CODE), SEARCH_MONTH ).get();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        while (true) {
+            if(attendanceStatusAPITask.getStatus() != AsyncTask.Status.FINISHED) {
+                try {
+                    HEAD = ResultObject.getJSONObject("HEAD");
+                    BODY = ResultObject.getJSONObject("BODY");
+
+                    Log.d("BODY >>", BODY.toString());
+
+                    if (HEAD.getInt("STATUS_CODE") == StatusCode.SUCCESS_CODE) {
+                        DAY_LIST = BODY.getJSONArray("DAY_LIST");
+                    }
+                    Log.d("JSONA", HEAD.getInt("STATUS_CODE") +"");
+                    Log.d("JSONB", DAY_LIST.length() + "");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
+
+
 
         DayList.clear();
 
@@ -125,6 +167,22 @@ public class AttendanceStatusActivity extends AppCompatActivity {
             //해당 월의 1일부터 마지막 일 까지 DayList에 넣는다.
             Day = new AttendanceCalendarItem();
             Day.setDay(Integer.toString(i));
+            Day.setPunch(false);
+
+            JSONObject tmp;
+            for(int j = 0 ; j < DAY_LIST.length() ; j++) {
+                try {
+                    tmp = DAY_LIST.getJSONObject(j);
+                    if(tmp != null) {
+                        String tmp_day = tmp.getString("PUNCH_IN");
+                        if( i == TimeCompo.DateStringToDay(tmp_day))
+                            Day.setPunch(true);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
             Day.setInMonth(true);
 
             DayList.add(Day);
