@@ -40,6 +40,24 @@
         android:orientation="vertical"
         android:layout_weight=".9">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/PunchInBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/easw"/>
+            <ImageButton
+                android:id="@+id/PunchOutBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/easw"/>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/AttendanceStatus"
             android:layout_width="match_parent"

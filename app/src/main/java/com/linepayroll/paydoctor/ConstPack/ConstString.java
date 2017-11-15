@@ -7,16 +7,31 @@ package com.linepayroll.paydoctor.ConstPack;
 
 public class ConstString {
 
-    /*
+    /**
      * Common String constant
      */
     public final static String NULL_STRING = "";
 
-    /*
+    /**
      * Loading Activity에 관련된 String constant
      */
     public final static String LOADING_MESSAGE_1_KR = "사원 정보를 읽어 오는 중입니다.";
 
     public final static String LOADING_COMPLETE_KR = "완료";
     public final static String LOADING_COMPLETE_EN = "Complete";
+
+    /**
+     * 출퇴근 Text
+     */
+    public final static String PUNCH_IN_KR = "출근";
+    public final static String PUNCH_OUT_KR = "퇴근";
+
+
+
+    /**
+     * BLE Scanning 시, 사용될 Text
+     */
+    public final static String BLE_PERMISSION_DENY_KR = "출/퇴근 체크를 위한 블루투스를 사용할 수 없습니다.";
+
+    public final static String TEST_BLE_MAC_ADDR = "BC:6A:29:AC:3C:E6";
 }

@@ -14,4 +14,12 @@ public class ConstNumber {
     public final static int TEST_MAX_LOOP_COUNT =  10000;
     public final static int TEST_HASH_KEY = 14;
 
+
+    /**
+     * BLE Sacnning 관련
+     */
+
+    public final static int SCAN_PERIOD = 10000;
+    public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 0;
+
 }

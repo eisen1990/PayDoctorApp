@@ -30,14 +30,14 @@ public class LoadingTask extends AsyncTask<Void, Integer, Void> {
      * 해당 Task를 실행한 부모 context를 받아와서
      * UI를 Handling한다.
      */
-    private Context parent;
+    private Context Parent;
     private ProgressBar Loading;
     private TextView LoadingMessage;
 
     public LoadingTask(Context context, ProgressBar Loading, TextView LoadingMessage) {
         //Todo Some initialize
 
-        this.parent = context;
+        this.Parent = context;
         this.Loading = Loading;
         this.LoadingMessage = LoadingMessage;
     }
@@ -56,13 +56,13 @@ public class LoadingTask extends AsyncTask<Void, Integer, Void> {
         super.onPostExecute(aVoid);
         Loading.setVisibility(View.GONE);
         LoadingMessage.setText(ConstString.LOADING_COMPLETE_EN);
-        Intent intent = new Intent(parent, MainActivity.class);
+        Intent intent = new Intent(Parent, MainActivity.class);
 
         /**
          * intent에 User에 대한 정보를 실어서
          * 다음 Acitivity에 전달할 것
          */
-        parent.startActivity(intent);
+        Parent.startActivity(intent);
 
     }
 
