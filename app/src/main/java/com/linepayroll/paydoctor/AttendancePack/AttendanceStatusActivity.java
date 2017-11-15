@@ -2,6 +2,7 @@ package com.linepayroll.paydoctor.AttendancePack;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import com.linepayroll.paydoctor.R;
 
@@ -12,9 +13,16 @@ import com.linepayroll.paydoctor.R;
 
 public class AttendanceStatusActivity extends AppCompatActivity {
 
+    ImageButton PrevMonthBtn;
+    ImageButton NextMonthBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance_status);
+
+        PrevMonthBtn = (ImageButton) findViewById(R.id.PrevMonth);
+        NextMonthBtn = (ImageButton) findViewById(R.id.NextMonth);
+
     }
 }

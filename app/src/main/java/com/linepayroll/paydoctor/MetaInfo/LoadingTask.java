@@ -1,4 +1,4 @@
-package com.linepayroll.paydoctor.RestAPI;
+package com.linepayroll.paydoctor.MetaInfo;
 
 import android.app.Activity;
 import android.content.Context;

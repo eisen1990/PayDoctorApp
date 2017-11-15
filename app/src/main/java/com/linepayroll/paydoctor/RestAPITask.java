@@ -1,4 +1,4 @@
-package com.linepayroll.paydoctor.RestAPI;
+package com.linepayroll.paydoctor;
 
 import android.os.AsyncTask;
 

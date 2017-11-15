@@ -1,18 +1,12 @@
 package com.linepayroll.paydoctor.MetaInfo;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.linepayroll.paydoctor.ConstPack.ConstNumber;
-import com.linepayroll.paydoctor.ConstPack.ConstString;
-import com.linepayroll.paydoctor.MainActivity;
+
 import com.linepayroll.paydoctor.R;
-import com.linepayroll.paydoctor.RestAPI.LoadingTask;
 
 /**
  * Created by eisen on 2017-11-09.
