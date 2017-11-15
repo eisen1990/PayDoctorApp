@@ -16,5 +16,11 @@
     <string name="RuleOfEmployment">Rule Of Employment</string>
     <string name="PrivacySetting">Privacy Setting</string>
 
+    <!-- Login Activity -->
+    <string name="CompanyId">Commpany ID</string>
+    <string name="UserId">USER ID</string>
+    <string name="Passwd">PASSWORD</string>
+    <string name="LogIn">LOGIN</string>
+    <string name="LogOut">LOGOUT</string>
 
 </resources>

@@ -9,7 +9,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.linepayroll.paydoctor.ConstPack.ConstNumber;
+import com.linepayroll.paydoctor.ConstPack.ConstURL;
 import com.linepayroll.paydoctor.R;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,6 +54,16 @@ public class AttendanceStatusActivity extends AppCompatActivity {
         CalenderView = (GridView) findViewById(R.id.CalendarView);
 
         DayList = new ArrayList<AttendanceCalendarItem>();
+
+        JSONObject ResultObject = null;
+        try {
+            ResultObject = new AttendanceStatusAPITask().execute(ConstURL.TEST_BASE_URL).get();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        if(ResultObject != null) {
+
+        }
     }
 
     @Override

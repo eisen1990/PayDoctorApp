@@ -11,7 +11,7 @@ public class ConstURL {
      * Testing Rest API 서버
      * EASW 연구원 심철 개인 서버 사용
      */
-    public final static String TEST_BASE_URL = "";
+    public final static String TEST_BASE_URL = "http://203.255.92.139:8080/PayDoctorAPI/rest";
 
 
     /**

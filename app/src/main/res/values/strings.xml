@@ -38,5 +38,13 @@
     <!-- Attendance Status Activity -->
     <string name="PrevArrow">&lt;&lt;</string>
     <string name="NextArrow">&gt;&gt;</string>
+    <string name="title_activity_login">Login</string>
+
+    <!-- Login Activity -->
+    <string name="CompanyId">회사아이디</string>
+    <string name="UserId">사원아이디</string>
+    <string name="Passwd">비밀번호</string>
+    <string name="LogIn">로그인</string>
+    <string name="LogOut">로그아웃</string>
 
 </resources>
