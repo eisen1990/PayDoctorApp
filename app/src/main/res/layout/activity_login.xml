@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:text="@string/CompanyId"
+        android:hint="@string/CompanyId"
         app:layout_constraintTop_toBottomOf="@+id/BasicImage" />
 
     <EditText
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:ems="20"
         android:inputType="textPersonName"
-        android:text="@string/UserId"
+        android:hint="@string/UserId"
         app:layout_constraintTop_toBottomOf="@+id/CompanyIdForm" />
 
     <EditText
@@ -39,11 +39,11 @@
         android:layout_height="wrap_content"
         android:ems="20"
         android:inputType="textPassword"
-        android:text="@string/Passwd"
+        android:hint="@string/Passwd"
         app:layout_constraintTop_toBottomOf="@+id/UserIdForm" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/LoginBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/LogIn"

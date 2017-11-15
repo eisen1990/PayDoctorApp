@@ -19,7 +19,7 @@ import com.linepayroll.paydoctor.MainActivity;
  * Login한 계정 정보를 통해 사용자 정보를 받아온다.
  */
 
-public class LoadingTask extends AsyncTask<Void, Integer, Void> {
+public class LoadingTask extends AsyncTask<String, Integer, Void> {
     /**
      * 1번 Parameter Void : excute() 실행 시 doInBackground로 넘겨줄 파라미터
      * 2번 Parameter Integer : publishProgress()로 넘겨서 onProgressUpdate로 넘겨줄 파라미터
@@ -34,6 +34,8 @@ public class LoadingTask extends AsyncTask<Void, Integer, Void> {
     private Context Parent;
     private ProgressBar Loading;
     private TextView LoadingMessage;
+
+    private int USER_ID_CODE;
 
     public LoadingTask(Context context, ProgressBar Loading, TextView LoadingMessage) {
         //Todo Some initialize
@@ -58,6 +60,7 @@ public class LoadingTask extends AsyncTask<Void, Integer, Void> {
         Loading.setVisibility(View.GONE);
         LoadingMessage.setText(ConstString.LOADING_COMPLETE_EN);
         Intent intent = new Intent(Parent, MainActivity.class);
+        intent.putExtra("USER_ID_CODE",USER_ID_CODE);
 
         /**
          * intent에 User에 대한 정보를 실어서
@@ -82,8 +85,9 @@ public class LoadingTask extends AsyncTask<Void, Integer, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Void doInBackground(String... params) {
         //로딩 중 데이터 송수신 또는 적재
+        USER_ID_CODE = Integer.parseInt(params[1]);
 
         /**
          * FIXME: Rest API 호출하여 사용자 정보 받아오도록 수정

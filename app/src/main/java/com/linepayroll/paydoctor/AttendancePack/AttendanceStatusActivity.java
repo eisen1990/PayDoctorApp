@@ -106,6 +106,9 @@ public class AttendanceStatusActivity extends AppCompatActivity {
 
         AttendanceCalendarItem Day;
 
+        /**
+         * 현재 월의 달력에서 1일 이전의 지난 달 일 수를 표시하는 부분
+         */
         for (int i = (PrevMonthEndDay - (DayOfMonth - 2)); i <= PrevMonthEndDay; i++) {
             Day = new AttendanceCalendarItem();
             Day.setDay(Integer.toString(i));
@@ -114,6 +117,10 @@ public class AttendanceStatusActivity extends AppCompatActivity {
             DayList.add(Day);
         }
 
+        /**
+         * 현재 월의 시작 요일부터 1일로 시작해서
+         * 월의 마지막 일까지 Day cell 입력
+         */
         for (int i = 1; i <= ThisMonthLastDay; i++) {
             //해당 월의 1일부터 마지막 일 까지 DayList에 넣는다.
             Day = new AttendanceCalendarItem();

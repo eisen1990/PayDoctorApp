@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     private int PunchInOutFlag = -1;
     private int ScanFlag = -1;
 
+    //사용자 정보 변수
+    private int USER_ID_CODE;
+
     //근태현황, 연차확인, 급여명세서, 취업규칙열람, 개인정보 변경 버튼들의 ID 값
     static final int[] BUTTONS_ID = {
             R.id.AttendanceStatus,
@@ -69,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        USER_ID_CODE = intent.getExtras().getInt("USER_ID_CODE");
 
         /**
          * Main Activity 상단의 날짜 TextView와
@@ -166,32 +172,36 @@ public class MainActivity extends AppCompatActivity {
              */
 
             int id = v.getId();
-            Intent i;
+            Intent intent;
 
             if (id == BUTTONS_ID[0]) {
                 //Todo:근태현황 Activity로 이동
-                i = new Intent(MainActivity.this, AttendanceStatusActivity.class);
-                startActivity(i);
+                intent = new Intent(MainActivity.this, AttendanceStatusActivity.class);
+                intent.putExtra("USER_ID_CODE", USER_ID_CODE);
+                startActivity(intent);
 
             } else if (id == BUTTONS_ID[1]) {
                 //Todo:연차확인 Activity로 이동
-                i = new Intent(MainActivity.this, CheckAnnualLeaveActivity.class);
-                startActivity(i);
+                intent = new Intent(MainActivity.this, CheckAnnualLeaveActivity.class);
+                intent.putExtra("USER_ID_CODE", USER_ID_CODE);
+                startActivity(intent);
 
             } else if (id == BUTTONS_ID[2]) {
                 //Todo:급여명세서 Activity로 이동
-                i = new Intent(MainActivity.this, PayStubActivity.class);
-                startActivity(i);
+                intent = new Intent(MainActivity.this, PayStubActivity.class);
+                intent.putExtra("USER_ID_CODE", USER_ID_CODE);
+                startActivity(intent);
 
             } else if (id == BUTTONS_ID[3]) {
                 //Todo:취업규칙열람 Activity로 이동
-                i = new Intent(MainActivity.this, RuleOfEmploymentActivity.class);
-                startActivity(i);
+                intent = new Intent(MainActivity.this, RuleOfEmploymentActivity.class);
+                startActivity(intent);
 
             } else if (id == BUTTONS_ID[4]) {
                 //Todo:개인정보 변경 Activity로 이동
-                i = new Intent(MainActivity.this, PrivacySettingActivity.class);
-                startActivity(i);
+                intent = new Intent(MainActivity.this, PrivacySettingActivity.class);
+                intent.putExtra("USER_ID_CODE", USER_ID_CODE);
+                startActivity(intent);
 
             } else {
                 //지정하지 않은 다른 ID의 버튼 클릭된 경우,

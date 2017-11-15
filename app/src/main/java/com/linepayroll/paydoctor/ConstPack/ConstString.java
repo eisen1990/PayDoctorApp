@@ -20,6 +20,13 @@ public class ConstString {
     public final static String LOADING_COMPLETE_KR = "완료";
     public final static String LOADING_COMPLETE_EN = "Complete";
 
+
+    /**
+     * Login 관련 String
+     */
+    public final static String LOGIN_FAILED_KR = "로그인에 실패하였습니다.";
+
+
     /**
      * 출퇴근 Text
      */
