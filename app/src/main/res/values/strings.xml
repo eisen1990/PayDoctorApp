@@ -35,4 +35,8 @@
     <string name="RuleOfEmployment">취업규칙 열람</string>
     <string name="PrivacySetting">개인정보 변경</string>
 
+    <!-- Attendance Status Activity -->
+    <string name="PrevArrow">&lt;&lt;</string>
+    <string name="NextArrow">&gt;&gt;</string>
+
 </resources>

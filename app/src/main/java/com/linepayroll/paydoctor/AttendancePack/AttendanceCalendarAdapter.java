@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -62,17 +63,73 @@ public class AttendanceCalendarAdapter extends BaseAdapter {
 
         MonthViewHolder ViewHolder;
 
+        //캐시된 View 없을 경우 새로 생성하고 Viewholder 세팅
         if(convertView == null) {
+            convertView = Inflater.inflate(Layout, null);
+
+            if(position % 7 == 6) {
+                convertView.setLayoutParams(new GridView.LayoutParams(getCellWidthDP() + getRestCellWidthDP(), getCellHeightDP()));
+            } else {
+                convertView.setLayoutParams(new GridView.LayoutParams(getCellWidthDP(), getCellHeightDP()));
+            }
+
+            ViewHolder = new MonthViewHolder();
+
+            ViewHolder.llBackground = (LinearLayout) convertView.findViewById(R.id.CalendarCell);
+            ViewHolder.tvDay = (TextView) convertView.findViewById(R.id.DayCellTv);
+
+            // ViewHolder를 세팅한다.
+            convertView.setTag(ViewHolder);
 
         } else {
             ViewHolder = (MonthViewHolder) convertView.getTag();
         }
 
-        return null;
+        if(item != null) {
+            ViewHolder.tvDay.setText(item.getDay());
+            if(item.isInMonth()) {
+                if (position % 7 == 0) {
+                    ViewHolder.tvDay.setTextColor(Color.RED);
+                } else if (position % 7 == 6) {
+                    ViewHolder.tvDay.setTextColor(Color.BLUE);
+                } else {
+                    ViewHolder.tvDay.setTextColor(Color.BLACK);
+                }
+            } else {
+                ViewHolder.tvDay.setTextColor(Color.GRAY);
+            }
+        }
+
+        return convertView;
     }
 
     protected class MonthViewHolder {
         protected LinearLayout llBackground;
         protected TextView tvDay;
     }
+
+    private int getCellWidthDP()
+    {
+//      int width = mContext.getResources().getDisplayMetrics().widthPixels;
+        int cellWidth = 480/7;
+
+        return cellWidth;
+    }
+
+    private int getRestCellWidthDP()
+    {
+//      int width = mContext.getResources().getDisplayMetrics().widthPixels;
+        int cellWidth = 480%7;
+
+        return cellWidth;
+    }
+
+    private int getCellHeightDP()
+    {
+//      int height = mContext.getResources().getDisplayMetrics().widthPixels;
+        int cellHeight = 480/6;
+
+        return cellHeight;
+    }
+
 }
